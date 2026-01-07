@@ -27,17 +27,32 @@ Examen 2526-S9-Développement Web Avancé
 
 ## 📁 Structure du Projet
 
-```
-project/
-├── controllers/
-│   └── recipesController.js    ← Fichier à compléter
-├── helpers/
-│   └── index.js                ← Fonctions readRecipes() et writeRecipes() fournies
-├── data/
-│   └── recipes.json            ← Base de données JSON
-├── routes/
-│   └── recipes.js              ← Routes déjà configurées
-└── server.js                   ← Serveur Express configuré
+```text
+exam-fullstack-recipes/
+├── backend/
+│   ├── controllers/
+│   │   └── recipesController.js    ← Avec TODOs backend
+│   ├── routes/
+│   │   └── recipes.js              ← Fourni complet
+│   ├── helpers/
+│   │   └── index.js                ← Fourni complet
+│   ├── data/
+│   │   └── recipes.json            ← Données de test
+│   ├── server.js                   ← Fourni complet
+│   └── package.json
+│
+├── frontend/
+│   ├── index.html                  ← Fourni complet (liste)
+│   ├── recipe.html                 ← Fourni complet (détail)
+│   ├── js/
+│   │   ├── api.js                  ← TODOs: fetch calls
+│   │   ├── ui.js                   ← Fourni complet
+│   │   ├── main.js                 ← TODOs: orchestration index
+│   │   └── recipeDetail.js         ← TODOs: orchestration détail
+│   └── css/
+│       └── custom.css              ← Fourni: ajustements mineurs
+│
+└── README.md                       ← Instructions examen
 ```
 
 ---
@@ -371,18 +386,3 @@ N'oubliez pas : **la pratique est la meilleure façon d'apprendre le développem
 Vous avez toutes les connaissances nécessaires pour réussir cet examen. Faites confiance à ce que vous avez appris et prenez votre temps.
 
 **Bonne chance ! 🚀**
-
-## Backend
-
-```text
-backend/
-├── package.json
-├── .env.example
-├── server.js (point d'entrée, 80% complet)
-├── routes/
-│   └── recipes.js (50% complet - avec TODOs)
-├── data/
-│   └── recipes.json (données complètes)
-└── middleware/
-    └── errorHandler.js (complet - pattern à suivre)
-```
