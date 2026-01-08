@@ -8,6 +8,9 @@ const loadRecipe = async (recipeId) => {
 	try {
 		// 1. Appeler l'API pour récupérer la recette par son ID
 		// const recipe = await getOneRecipe(recipeId)
+
+        // Mock de recette pour test sans backend
+        // TODO: Supprimer cette ligne quand l'API sera fonctionnelle
 		const recipe = {
 			id: 1,
 			name: "Ratatouille Provençale",
@@ -33,7 +36,7 @@ const loadRecipe = async (recipeId) => {
 		}
 
 		// 2. Afficher la recette dans la grid
-		renderRecipeCard(recipe)
+		//renderRecipeCard(recipe)
 	} catch (error) {
 		console.error("Erreur lors du chargement de la recette:", error)
 		alert(
