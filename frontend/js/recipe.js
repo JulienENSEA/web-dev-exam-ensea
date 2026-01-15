@@ -1,85 +1,79 @@
 // ============================================
-// IMPORTS - Modules nécessaires
+// IMPORTS
 // ============================================
-import { getOneRecipe, deletOneRecipe } from "./api.js"
-import { renderRecipeCard, renderSingleRecipe } from "./ui.js"
-
-const loadRecipe = async (recipeId) => {
-	try {
-		// Appeler l'API pour récupérer la recette par son ID
-		const recipe = await getOneRecipe(recipeId)
-
-		// TODO: appeler renderSingleRecipe(recipe)
-		const recipeDetail = document.getElementById("recipe-detail")
-
-		// Afficher la recette dans la grid
-		recipeDetail.innerHTML = renderSingleRecipe(recipe)
-	} catch (error) {
-		console.error("Erreur lors du chargement de la recette:", error.message)
-		alert(
-			"Impossible de charger la recette. Vérifiez que le serveur est demarré."
-		)
-	}
-}
-
+import { getOneRecipe, deleteRecipe } from "./api.js"
+import { renderSingleRecipe } from "./ui.js"
 
 // ============================================
-// INITIALISATION DE L'APPLICATION
+// INITIALISATION
 // ============================================
-// Cette fonction est appelée automatiquement au chargement de la page
-// Elle charge et affiche toutes les recettes
-
-const setupEventListeners = () => {
-	const loader = document.getElementById("loading-spinner")
-	const recipeDetail = document.getElementById("recipe-detail")
-	const deleteButton = document.getElementById("delete-recipe-btn")
-
-	if (loader) {
-		loader.classList.add("d-none")
-	}
-	if (recipeDetail) {
-		recipeDetail.classList.remove("d-none")
-	}
-
-	if (deleteButton) {
-		deleteButton.addEventListener("click", () => {
-			alert("Fonction de suppression non implémentée.")
-		})
-	}
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-	// receive recipe id from url
-	const urlParams = new URLSearchParams(window.location.search)
-	const recipeId = urlParams.get("id")
-	console.log("API recipeData:", recipeId)
-	loadRecipe(recipeId)
-	setupEventListeners()
+    // 1. Récupérer l'ID dans l'URL (ex: recipe.html?id=123)
+    const urlParams = new URLSearchParams(window.location.search)
+    const recipeId = urlParams.get("id")
+    
+    // 2. Lancer le chargement ou afficher une erreur
+    if (recipeId) {
+        loadRecipe(recipeId)
+    } else {
+        alert("Aucun ID de recette fourni.")
+    }
+
+    setupEventListeners()
 })
 
 // ============================================
-// AFFICHER LES RECETTES DANS LA GRID
+// LOGIQUE DE CHARGEMENT
 // ============================================
-// Fonction fournie - génère le HTML pour toutes les recettes
+const loadRecipe = async (id) => {
+    try {
+        const recipeDetail = document.getElementById("recipe-detail")
+        const spinner = document.getElementById("loading-spinner")
 
-const displaySingleRecipe = (recipe) => {
-	// Récupérer le conteneur où afficher les recettes
-	const recipesDetails = document.getElementById("recipe-detail")
+        // Appel API
+        const recipe = await getOneRecipe(id)
+        
+        // Affichage
+        if (spinner) spinner.classList.add("d-none")
+        if (recipeDetail) {
+            recipeDetail.innerHTML = renderSingleRecipe(recipe)
+            recipeDetail.classList.remove("d-none")
+        }
 
-	// Vider le conteneur avant d'ajouter les nouvelles recettes
-	clearRecipesList(recipesDetails)
+        // Brancher le bouton supprimer (maintenant qu'il existe dans le DOM)
+        setupDeleteButton(id)
 
-	// Si il n'y a pas de recette, afficher un message
-	if (!recipe) {
-		recipesDetails.innerHTML = `
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    Recette non-disponible. Veuillez revenir plus tard !
-                </div>
-            </div>
-        `
-		return
-	}
+    } catch (error) {
+        console.error("Erreur chargement:", error)
+        const errorDiv = document.getElementById("error-message")
+        if (errorDiv) {
+            errorDiv.classList.remove("d-none")
+            document.getElementById("loading-spinner").classList.add("d-none")
+            document.getElementById("error-text").textContent = "Impossible de charger la recette."
+        }
+    }
+}
 
-	renderSingleRecipe(recipe)
+// ============================================
+// GESTION SUPPRESSION
+// ============================================
+const setupDeleteButton = (id) => {
+    const deleteBtn = document.getElementById("delete-recipe-btn")
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", async () => {
+            if (confirm("Voulez-vous vraiment supprimer cette recette ?")) {
+                try {
+                    await deleteRecipe(id)
+                    alert("Recette supprimée !")
+                    window.location.href = "index.html"
+                } catch (error) {
+                    alert("Erreur lors de la suppression.")
+                }
+            }
+        })
+    }
+}
+
+const setupEventListeners = () => {
+    // Placeholder pour d'autres écouteurs si nécessaire
 }
